@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alejandrazuleta.pruebaseleccion.Model.ApiService
-import com.alejandrazuleta.pruebaseleccion.Model.Posts
-import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
+import com.alejandrazuleta.pruebaseleccion.Model.*
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,6 +14,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private var listPosts = ArrayList<PostsItem>()
+    private var listUsers = ArrayList<UsersItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -2,6 +2,7 @@ package com.alejandrazuleta.pruebaseleccion.Model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class PostsItem(
     @SerializedName("body")
@@ -12,4 +13,4 @@ data class PostsItem(
     val title: String,
     @SerializedName("userId")
     val userId: Int
-)
+): Serializable

@@ -2,6 +2,7 @@ package com.alejandrazuleta.pruebaseleccion.Model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class UsersItem(
     @SerializedName("address")
@@ -20,4 +21,4 @@ data class UsersItem(
     val username: String,
     @SerializedName("website")
     val website: String
-)
+): Serializable
