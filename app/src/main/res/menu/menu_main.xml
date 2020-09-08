@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mo_eliminar"
+        android:title="@string/eliminar"
+        android:icon="@drawable/baseline_delete_white_18dp"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/mo_actualizar"
+        android:title="@string/actualizar"
+        android:icon="@drawable/baseline_refresh_white_18dp"
+        app:showAsAction="ifRoom"/>
+    <group
+        android:id="@+id/mo_group">
+        <item
+            android:id="@+id/mo_all"
+            android:title="@string/ver_todos_los_post"
+            android:icon="@drawable/baseline_list_black_18dp"/>
+        <item
+            android:id="@+id/mo_fav"
+            android:title="@string/ver_post_favoritos"
+            android:icon="@drawable/baseline_favorite_black_24dp"/>
+    </group>
+</menu>

@@ -42,7 +42,7 @@ class HomeFragment: Fragment() {
             .getPosts()
             .enqueue(object : Callback<Posts> {
                 override fun onFailure(call: Call<Posts>, t: Throwable) {
-                    Log.d("Error",t?.message)
+                    Log.d("Error",t.message!!)
                 }
 
                 override fun onResponse(call: Call<Posts>, response: Response<Posts>) {

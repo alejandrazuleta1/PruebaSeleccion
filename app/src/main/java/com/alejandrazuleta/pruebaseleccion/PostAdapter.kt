@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alejandrazuleta.pruebaseleccion.Model.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.post_list_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,7 +39,7 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
                         itemView.tv_user_name.text=usersItem.username
                     }
                     override fun onFailure(call: Call<UsersItem>, t: Throwable) {
-                        Log.d("ErrorAdapter",t?.message)
+                        Log.d("ErrorAdapter",t.message!!)
                     }
 
                 })

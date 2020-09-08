@@ -3,4 +3,8 @@
     <string name="user_name">User Name</string>
     <string name="post_tittle">Post tittle</string>
     <string name="post_body">Post body</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="ver_todos_los_post">Ver todos los post</string>
+    <string name="ver_post_favoritos">Ver post favoritos</string>
 </resources>
