@@ -33,4 +33,5 @@ class FavoritesFragment: Fragment() {
     private fun loadListPost() {
 
     }
+
 }

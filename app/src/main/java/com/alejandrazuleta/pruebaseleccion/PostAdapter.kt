@@ -71,4 +71,9 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
 
     override fun getItemCount(): Int = postsList.size
 
+    fun removeItem(viewHolder: RecyclerView.ViewHolder) {
+        postsList.removeAt(viewHolder.adapterPosition)
+        notifyItemRemoved(viewHolder.adapterPosition)
+    }
+
 }
