@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alejandrazuleta.pruebaseleccion.Model.*
+import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
 import kotlinx.android.synthetic.main.activity_detalle.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.post_list_item.*
@@ -18,14 +19,26 @@ import retrofit2.Response
 class DetalleActivity : AppCompatActivity() {
 
     private lateinit var postsItem : PostsItem
+    private lateinit var postFavorite : PostEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalle)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        postsItem = intent?.getSerializableExtra("post") as PostsItem
-        updateUI(postsItem)
+        val envia = intent?.getStringExtra("envia")
 
+        if(envia=="favorites"){
+            postFavorite = intent?.getSerializableExtra("post") as PostEntity
+            updateFavoriteUI(postFavorite)
+        }else{
+            postsItem = intent?.getSerializableExtra("post") as PostsItem
+            updateUI(postsItem)
+        }
+
+    }
+
+    private fun updateFavoriteUI(postFavorite: PostEntity) {
+        //TODO("Not yet implemented")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

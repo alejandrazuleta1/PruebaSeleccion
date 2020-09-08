@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alejandrazuleta.pruebaseleccion.Model.*
+import com.alejandrazuleta.pruebaseleccion.Model.Local.Repository
 import kotlinx.android.synthetic.main.post_list_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,12 +47,24 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
 
             itemView.tv_tittle.text = post.title
             itemView.tv_body.text = post.body
+
+            itemView.im_fav.setOnClickListener {
+                val repository = Repository()
+                repository.insertPostFavorite(
+                    post.id,
+                    post.body,
+                    post.title,
+                    post.userId
+                )
+            }
+
         }
 
 
         override fun onClick(v: View) {
             val intent = Intent(itemView.context, DetalleActivity::class.java)
             intent.putExtra("post", post)
+            intent.putExtra("envia","list")
             itemView.context.startActivity(intent)
         }
 
