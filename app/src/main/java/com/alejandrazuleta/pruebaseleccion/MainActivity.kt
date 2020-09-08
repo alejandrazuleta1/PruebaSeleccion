@@ -13,37 +13,14 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
-    private var listPosts = ArrayList<PostsItem>()
-    private var listUsers = ArrayList<UsersItem>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(
-            this,
-            RecyclerView.VERTICAL,
-            false
-        )
-        loadListPost()
-    }
+        val manager = supportFragmentManager
+        val transaction = manager.beginTransaction()
 
-    private fun loadListPost() {
-        ApiService.create()
-            .getPosts()
-            .enqueue(object : Callback<Posts> {
-                override fun onFailure(call: Call<Posts>, t: Throwable) {
-                    Log.d("Error",t?.message)
-                }
-
-                override fun onResponse(call: Call<Posts>, response: Response<Posts>) {
-                    if (response.isSuccessful) {
-                        listPosts = response.body()!! as ArrayList<PostsItem>
-                        val postAdapter = PostAdapter(listPosts)
-                        recyclerView.adapter = postAdapter
-                    }
-                }
-            })
+        val homeFragment = HomeFragment()
+        transaction.add(R.id.contenedor, homeFragment).commit()
     }
 }
