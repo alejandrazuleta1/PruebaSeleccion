@@ -15,7 +15,7 @@ class PostPresenterImpl (var postView: PostView) : PostPresenter {
         postView.showErrorLoadPost(message)
     }
 
-    override fun sendListMovies(posts: List<PostsItem>) {
-        postView.sendListMovies(posts)
+    override fun sendListPosts(posts: List<PostsItem>) {
+        postView.sendListPosts(posts)
     }
 }

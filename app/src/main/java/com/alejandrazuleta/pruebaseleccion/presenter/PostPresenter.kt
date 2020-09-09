@@ -5,5 +5,5 @@ import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
 interface PostPresenter {
     fun loadListPost()
     fun showErrorLoadPost(message: String?)
-    fun sendListMovies(posts: List<PostsItem>)
+    fun sendListPosts(posts: List<PostsItem>)
 }

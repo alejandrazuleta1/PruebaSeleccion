@@ -1,6 +1,7 @@
 package com.alejandrazuleta.pruebaseleccion.view
 
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -46,22 +47,8 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
                     }
 
                 })
-
             itemView.tv_tittle.text = post.title
             itemView.tv_body.text = post.body
-
-            /*itemView.im_fav.setOnClickListener {
-                val repository = Repository()
-                repository.insertPostFavorite(
-                    post.id,
-                    post.body,
-                    post.title,
-                    userName
-                )
-            }
-
-             */
-
         }
 
 
@@ -69,8 +56,10 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
             val intent = Intent(itemView.context, DetalleActivity::class.java)
             intent.putExtra("post", post)
             intent.putExtra("envia","list")
+            itemView.setBackgroundColor(Color.TRANSPARENT)
             itemView.context.startActivity(intent)
         }
+
 
 
     }
@@ -78,11 +67,13 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.post_list_item, parent, false)
+
         return PostsViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: PostsViewHolder, position: Int) {
         val post = postsList[position]
+        if(position<2) holder.itemView.setBackgroundColor(Color.BLUE)
         holder.setPost(post)
     }
 

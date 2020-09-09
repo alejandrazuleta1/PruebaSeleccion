@@ -66,7 +66,7 @@ class HomeFragment: Fragment(),PostView {
         Log.d("LoadPost",message!!)
     }
 
-    override fun sendListMovies(posts: List<PostsItem>) {
+    override fun sendListPosts(posts: List<PostsItem>) {
         this.listPosts = posts
         root.recyclerView.setHasFixedSize(true)
         root.recyclerView.layoutManager = LinearLayoutManager(
