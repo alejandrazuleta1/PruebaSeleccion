@@ -10,5 +10,7 @@ class PostEntity (
     @PrimaryKey var id: Int,
     var body: String,
     var title: String,
-    var userId: Int
+    var userId: Int,
+    var userName: String,
+    var rating : Float
 ): Serializable

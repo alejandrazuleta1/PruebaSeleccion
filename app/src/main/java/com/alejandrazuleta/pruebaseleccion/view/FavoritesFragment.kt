@@ -1,9 +1,7 @@
-package com.alejandrazuleta.pruebaseleccion
+package com.alejandrazuleta.pruebaseleccion.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
 import com.alejandrazuleta.pruebaseleccion.Model.Local.Repository
 import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
+import com.alejandrazuleta.pruebaseleccion.R
 import kotlinx.android.synthetic.main.fragment_favorites.view.*
 
 class FavoritesFragment: Fragment() {
@@ -24,20 +23,21 @@ class FavoritesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         root = inflater.inflate(R.layout.fragment_favorites,container,false)
-        loadListFavoritesPost()
+
         root.recyclerView.setHasFixedSize(true)
         root.recyclerView.layoutManager = LinearLayoutManager(
             context,
             RecyclerView.VERTICAL,
             false
         )
+        loadListFavoritesPost()
         return root
     }
 
     private fun loadListFavoritesPost() {
         val repository = Repository()
         repository.getFavoritesPosts().observe(this, Observer {
-            root.recyclerView.adapter = PostsFavoritesAdapter(it!! as java.util.ArrayList<PostEntity>)
+            root.recyclerView.adapter = FavoritesPostsAdapter(it!! as java.util.ArrayList<PostEntity>)
         })
     }
 

@@ -12,12 +12,15 @@ class Repository {
         id: Int,
         body: String,
         title: String,
-        userId: Int
+        userId :Int,
+        userName: String,
+        rating : Float
     ){
-        val post = PostEntity(id,body, title, userId)
+        val post = PostEntity(id,body, title, userId,userName,rating)
         insertTask(post)
     }
 
+    @SuppressLint("StaticFieldLeak")
     private fun insertTask(post: PostEntity) {
         object : AsyncTask<Void,Void,Void>(){
             override fun doInBackground(vararg p0: Void): Void? {
@@ -27,12 +30,31 @@ class Repository {
         }.execute()
     }
 
+    fun getFavoritesPosts():LiveData<List<PostEntity>>{
+        return postDAO.getPosts()
+    }
+
+    fun update(post: PostEntity){
+        updateTask(post)
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private fun updateTask(post: PostEntity) {
+        object : AsyncTask<Void,Void,Void>(){
+            override fun doInBackground(vararg p0: Void): Void? {
+                postDAO.updatePost(post)
+                return null
+            }
+        }.execute()
+    }
+
+/*
     fun deletePostFavorite(id: Int) {
         //TODO("Not yet implemented")
     }
 
-    fun getFavoritesPosts():LiveData<List<PostEntity>>{
-        return postDAO.getPosts()
-    }
+
+
+     */
 
 }

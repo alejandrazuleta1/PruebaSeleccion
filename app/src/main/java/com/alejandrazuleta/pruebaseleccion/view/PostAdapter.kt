@@ -1,4 +1,4 @@
-package com.alejandrazuleta.pruebaseleccion
+package com.alejandrazuleta.pruebaseleccion.view
 
 import android.content.Intent
 import android.util.Log
@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alejandrazuleta.pruebaseleccion.Model.*
-import com.alejandrazuleta.pruebaseleccion.Model.Local.Repository
+import com.alejandrazuleta.pruebaseleccion.R
 import kotlinx.android.synthetic.main.post_list_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAdapter.MoviesViewHolder>() {
+class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAdapter.PostsViewHolder>() {
 
     private var postsList = ArrayList<PostsItem>()
 
@@ -21,7 +21,7 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
         this.postsList = postsList
     }
 
-    class MoviesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+    class PostsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
         private var post: PostsItem? = null
@@ -31,6 +31,7 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
         }
 
         fun setPost(post: PostsItem) {
+            var userName = ""
             this.post = post
             ApiService.create()
                 .getUserById(post.userId)
@@ -38,6 +39,7 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
                     override fun onResponse(call: Call<UsersItem>, response: Response<UsersItem>) {
                         val usersItem =response.body() as UsersItem
                         itemView.tv_user_name.text=usersItem.username
+                        userName=usersItem.username
                     }
                     override fun onFailure(call: Call<UsersItem>, t: Throwable) {
                         Log.d("ErrorAdapter",t.message!!)
@@ -48,15 +50,17 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
             itemView.tv_tittle.text = post.title
             itemView.tv_body.text = post.body
 
-            itemView.im_fav.setOnClickListener {
+            /*itemView.im_fav.setOnClickListener {
                 val repository = Repository()
                 repository.insertPostFavorite(
                     post.id,
                     post.body,
                     post.title,
-                    post.userId
+                    userName
                 )
             }
+
+             */
 
         }
 
@@ -71,13 +75,13 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.post_list_item, parent, false)
-        return MoviesViewHolder(itemView)
+        return PostsViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PostsViewHolder, position: Int) {
         val post = postsList[position]
         holder.setPost(post)
     }
