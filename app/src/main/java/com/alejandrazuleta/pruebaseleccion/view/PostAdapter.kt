@@ -70,7 +70,8 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
 
     override fun onBindViewHolder(holder: PostsViewHolder, position: Int) {
         val post = postsList[position]
-        if(position<2) holder.itemView.setBackgroundColor(Color.BLUE)
+        if(position<2) holder.itemView.setBackgroundColor(Color.parseColor("#303F9F"))
+        else holder.itemView.setBackgroundColor(Color.TRANSPARENT)
         holder.setPost(post)
     }
 

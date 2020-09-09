@@ -4,11 +4,11 @@
     <item
         android:id="@+id/mo_eliminar"
         android:title="@string/eliminar"
-        android:icon="@drawable/baseline_delete_white_18dp"
+        android:icon="@drawable/ic_delete_white_24dp"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/mo_actualizar"
         android:title="@string/eliminar"
-        android:icon="@drawable/baseline_refresh_white_18dp"
+        android:icon="@drawable/ic_refresh_white_24dp"
         app:showAsAction="ifRoom"/>
 </menu>
