@@ -37,11 +37,9 @@ class DetalleActivity : AppCompatActivity() {
         }
 
         im_fav.setOnClickListener {
-            //agregar si es de la lista completa
-            // o actualizar si es ya favorito
-
             if(envia=="favorites"){
                 //update
+
             }else{
                 //insert
                 ApiService.create()
