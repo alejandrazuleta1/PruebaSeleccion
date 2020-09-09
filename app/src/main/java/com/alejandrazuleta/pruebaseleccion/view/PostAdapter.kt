@@ -59,9 +59,6 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
             itemView.setBackgroundColor(Color.TRANSPARENT)
             itemView.context.startActivity(intent)
         }
-
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
@@ -82,6 +79,11 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
     fun removeItem(viewHolder: RecyclerView.ViewHolder) {
         postsList.removeAt(viewHolder.adapterPosition)
         notifyItemRemoved(viewHolder.adapterPosition)
+    }
+
+    fun removeAllItem() {
+        postsList.clear()
+        notifyDataSetChanged()
     }
 
 }

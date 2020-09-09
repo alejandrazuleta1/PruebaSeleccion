@@ -24,6 +24,7 @@ class HomeFragment: Fragment(),PostView {
 
     private var postPresenter : PostPresenter?=null
     private var listPosts : List<PostsItem> ?=null
+    private lateinit var postAdapter: PostAdapter
     private lateinit var root : View
 
     //private lateinit var postAdapter : PostAdapter
@@ -35,8 +36,27 @@ class HomeFragment: Fragment(),PostView {
     ): View? {
         root = inflater.inflate(R.layout.fragment_home,container,false)
         setHasOptionsMenu(true)
+
         postPresenter = PostPresenterImpl(this)
+
         getPost()
+
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                postAdapter.removeItem(viewHolder)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(root.recyclerView)
 
         return root
     }
@@ -49,10 +69,11 @@ class HomeFragment: Fragment(),PostView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.mo_eliminar->{
-
+                postAdapter.removeAllItem()
             }
             R.id.mo_actualizar->{
-
+                getPost()
+                postAdapter.notifyDataSetChanged()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -74,9 +95,8 @@ class HomeFragment: Fragment(),PostView {
             RecyclerView.VERTICAL,
             false
         )
-        val postAdapter = PostAdapter(listPosts as ArrayList<PostsItem>)
+        postAdapter = PostAdapter(listPosts as ArrayList<PostsItem>)
         root.recyclerView.adapter=postAdapter
     }
-
 
 }
