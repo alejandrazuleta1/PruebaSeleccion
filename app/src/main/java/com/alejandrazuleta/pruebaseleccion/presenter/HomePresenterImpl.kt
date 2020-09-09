@@ -2,9 +2,9 @@ package com.alejandrazuleta.pruebaseleccion.presenter
 
 import com.alejandrazuleta.pruebaseleccion.Model.PostInteractorImpl
 import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
-import com.alejandrazuleta.pruebaseleccion.view.PostView
+import com.alejandrazuleta.pruebaseleccion.view.HomeFragmentView
 
-class PostPresenterImpl (var postView: PostView) : PostPresenter {
+class HomePresenterImpl (var homeFragmentView: HomeFragmentView) : HomePresenter {
     private var postInteractor = PostInteractorImpl(this)
 
     override fun loadListPost() {
@@ -12,10 +12,10 @@ class PostPresenterImpl (var postView: PostView) : PostPresenter {
     }
 
     override fun showErrorLoadPost(message: String?) {
-        postView.showErrorLoadPost(message)
+        homeFragmentView.showErrorLoadPost(message)
     }
 
     override fun sendListPosts(posts: List<PostsItem>) {
-        postView.sendListPosts(posts)
+        homeFragmentView.sendListPosts(posts)
     }
 }

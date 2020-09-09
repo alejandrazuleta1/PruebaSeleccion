@@ -6,10 +6,12 @@
         <item
             android:id="@+id/mo_all"
             android:title="@string/ver_todos_los_post"
-            android:icon="@drawable/baseline_list_black_18dp" />
+            android:icon="@drawable/ic_list_white_24dp"
+            app:showAsAction="ifRoom"/>
         <item
             android:id="@+id/mo_fav"
             android:title="@string/ver_post_favoritos"
-            android:icon="@drawable/baseline_favorite_black_24dp" />
+            android:icon="@drawable/ic_favorite_white_24dp"
+            app:showAsAction="ifRoom"/>
     </group>
 </menu>

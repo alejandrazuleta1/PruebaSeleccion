@@ -1,5 +1,6 @@
 package com.alejandrazuleta.pruebaseleccion.view
 
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -17,6 +18,13 @@ class MainActivity : AppCompatActivity() {
 
         val homeFragment = HomeFragment()
         transaction.add(R.id.contenedor, homeFragment).commit()
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getPost()
+    }
+
+    private fun getPost() {
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -39,6 +47,9 @@ class MainActivity : AppCompatActivity() {
                 val favoritesFragment =
                     FavoritesFragment()
                 transaction.replace(R.id.contenedor, favoritesFragment).commit()
+            }
+            R.id.mo_actualizar->{
+                //descargar datos a room otra vez
             }
         }
 

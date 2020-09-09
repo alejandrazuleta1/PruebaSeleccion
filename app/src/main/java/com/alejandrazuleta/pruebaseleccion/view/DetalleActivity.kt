@@ -10,21 +10,32 @@ import com.alejandrazuleta.pruebaseleccion.Model.*
 import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
 import com.alejandrazuleta.pruebaseleccion.Model.Local.Repository
 import com.alejandrazuleta.pruebaseleccion.R
+import com.alejandrazuleta.pruebaseleccion.presenter.DetallePresenter
+import com.alejandrazuleta.pruebaseleccion.presenter.DetallePresenterImpl
+import com.alejandrazuleta.pruebaseleccion.presenter.HomePresenter
+import com.alejandrazuleta.pruebaseleccion.presenter.HomePresenterImpl
 import kotlinx.android.synthetic.main.activity_detalle.*
 import kotlinx.android.synthetic.main.post_list_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetalleActivity : AppCompatActivity() {
+class DetalleActivity : AppCompatActivity(), DetalleActivityView {
 
     private lateinit var postsItem : PostsItem
     private lateinit var postFavorite : PostEntity
     private var envia = ""
 
+    private var usersItem:UsersItem?=null
+    private var detallePresenter : DetallePresenter?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalle)
+
+        detallePresenter = DetallePresenterImpl(this)
+
+
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         envia = intent?.getStringExtra("envia").toString()
 
@@ -33,53 +44,36 @@ class DetalleActivity : AppCompatActivity() {
             updateFavoriteUI(postFavorite)
         }else{
             postsItem = intent?.getSerializableExtra("post") as PostsItem
+            detallePresenter!!.loadUserById(postsItem.userId)
             updateUI(postsItem)
         }
 
         im_fav.setOnClickListener {
             if(envia=="favorites"){
-                //update
-
+                //delete fav
             }else{
                 //insert
-                ApiService.create()
-                    .getUserById(postsItem.userId)
-                    .enqueue(object : Callback<UsersItem> {
-                        override fun onResponse(call: Call<UsersItem>, response: Response<UsersItem>) {
-                            val usersItem =response.body() as UsersItem
-
-                            val repository = Repository()
-                            repository.insertPostFavorite(
-                                postsItem.id,
-                                postsItem.body,
-                                postsItem.title,
-                                postsItem.userId,
-                                usersItem.username,
-                                0F
-                            )
-
-                        }
-                        override fun onFailure(call: Call<UsersItem>, t: Throwable) {
-                            Log.d("ErrorAdapter",t.message!!)
-                        }
-
-                    })
+                detallePresenter!!.insertFav(
+                    postsItem.id,
+                    postsItem.body,
+                    postsItem.title,
+                    postsItem.userId,
+                    usersItem!!.username,
+                    0F)
             }
         }
 
         ratingBar.setOnRatingBarChangeListener(
             object : RatingBar.OnRatingBarChangeListener{
                 override fun onRatingChanged(p0: RatingBar?, p1: Float, p2: Boolean) {
-                    val repository = Repository()
-                    repository.update(
-                        PostEntity(
-                            postFavorite.id,
-                            postFavorite.body,
-                            postFavorite.title,
-                            postFavorite.userId,
-                            postFavorite.userName,
-                            p1
-                    ))
+                    detallePresenter!!.update(
+                        postFavorite.id,
+                        postFavorite.body,
+                        postFavorite.title,
+                        postFavorite.userId,
+                        postFavorite.userName,
+                        p1
+                    )
                 }
             }
 
@@ -144,5 +138,9 @@ class DetalleActivity : AppCompatActivity() {
         tv_postTittle.text=postFavorite.title
         tv_postBody.text=postFavorite.body
 
+    }
+
+    override fun sendUser(usersItem: UsersItem) {
+        this.usersItem=usersItem
     }
 }
