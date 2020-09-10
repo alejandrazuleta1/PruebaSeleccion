@@ -1,5 +1,8 @@
 package com.alejandrazuleta.pruebaseleccion.view
 
+import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
+import com.alejandrazuleta.pruebaseleccion.Model.UsersItem
+
 interface MainView {
-    fun loadAllPost()
+    fun showErrorLoadPost(message: String?)
 }

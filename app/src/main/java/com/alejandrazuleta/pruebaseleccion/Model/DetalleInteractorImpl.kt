@@ -10,35 +10,22 @@ import retrofit2.Response
 
 class DetalleInteractorImpl(var detallePresenter: DetallePresenter) : DetalleInteractor{
 
-    override fun loadUserById(id: Int) {
-        ApiService.create()
-            .getUserById(id)
-            .enqueue(object : Callback<UsersItem> {
-                override fun onResponse(call: Call<UsersItem>, response: Response<UsersItem>) {
-                    val usersItem =response.body() as UsersItem
-                    detallePresenter.sendUser(usersItem)
-                }
-                override fun onFailure(call: Call<UsersItem>, t: Throwable) {
-                    Log.d("ErrorLoadUserById",t.message!!)
-                }
-
-            })
-    }
-
-    override fun insertFav(id:Int, body: String,title:String,userId:Int,username:String,rating:Float) {
-        val repository = Repository()
-        repository.insertPostFavorite(id,body,title,userId,username,rating)
-    }
-
     override fun update(
         id: Int,
         body: String,
         title: String,
         userId: Int,
+        user_Name: String,
         username: String,
-        rating: Float
+        email: String,
+        city:String,
+        phone:String,
+        companyName:String,
+        rating: Float,
+        read :Boolean,
+        fav :Boolean
     ) {
         val repository = Repository()
-        repository.update(PostEntity(id,body,title,userId,username,rating))
+        repository.update(PostEntity(id,body,title,userId,user_Name,username,email,city,phone,companyName,rating,read,fav))
     }
 }

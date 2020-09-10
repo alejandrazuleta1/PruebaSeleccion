@@ -3,15 +3,26 @@ package com.alejandrazuleta.pruebaseleccion.view
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
+import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
+import com.alejandrazuleta.pruebaseleccion.Model.UsersItem
 import com.alejandrazuleta.pruebaseleccion.R
+import com.alejandrazuleta.pruebaseleccion.presenter.MainPresenter
+import com.alejandrazuleta.pruebaseleccion.presenter.MainPresenterImpl
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView{
+
+    private var mainPresenter : MainPresenter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mainPresenter = MainPresenterImpl(this)
+        getPosts()
 
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
@@ -20,11 +31,11 @@ class MainActivity : AppCompatActivity() {
         transaction.add(R.id.contenedor, homeFragment).commit()
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getPost()
+
     }
 
-    private fun getPost() {
-
+    private fun getPosts() {
+        mainPresenter?.loadListPost()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,11 +60,18 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.contenedor, favoritesFragment).commit()
             }
             R.id.mo_actualizar->{
-                //descargar datos a room otra vez
+                getPosts()
+            }
+            R.id.mo_eliminar->{
+                mainPresenter!!.deleteAll()
             }
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun showErrorLoadPost(message: String?) {
+        Log.d("LoadPost", message!!)
     }
 
 

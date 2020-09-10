@@ -36,7 +36,7 @@ class FavoritesPostsAdapter(postsFavoritesList:ArrayList<PostEntity>) :
 
         fun setPost(post: PostEntity) {
             this.post = post
-            itemView.tv_user_name.text = post.userName
+            itemView.tv_user_name.text = post.username
             itemView.tv_tittle.text = post.title
             itemView.tv_body.text = post.body
         }
@@ -45,7 +45,6 @@ class FavoritesPostsAdapter(postsFavoritesList:ArrayList<PostEntity>) :
         override fun onClick(v: View) {
             val intent = Intent(itemView.context, DetalleActivity::class.java)
             intent.putExtra("post", post)
-            intent.putExtra("envia","favorites")
             itemView.context.startActivity(intent)
         }
 

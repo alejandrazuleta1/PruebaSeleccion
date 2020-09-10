@@ -11,6 +11,13 @@ class PostEntity (
     var body: String,
     var title: String,
     var userId: Int,
-    var userName: String,
-    var rating : Float
+    var user_Name: String,
+    var username: String,
+    var email: String,
+    var addressCity: String,
+    var phone: String,
+    var companyName: String,
+    var rating : Float,
+    var read : Boolean,
+    var fav :Boolean
 ): Serializable

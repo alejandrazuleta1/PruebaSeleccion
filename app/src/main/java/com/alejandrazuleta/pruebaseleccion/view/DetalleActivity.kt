@@ -8,23 +8,17 @@ import android.widget.RatingBar
 import androidx.appcompat.app.AppCompatActivity
 import com.alejandrazuleta.pruebaseleccion.Model.*
 import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
-import com.alejandrazuleta.pruebaseleccion.Model.Local.Repository
 import com.alejandrazuleta.pruebaseleccion.R
 import com.alejandrazuleta.pruebaseleccion.presenter.DetallePresenter
 import com.alejandrazuleta.pruebaseleccion.presenter.DetallePresenterImpl
-import com.alejandrazuleta.pruebaseleccion.presenter.HomePresenter
-import com.alejandrazuleta.pruebaseleccion.presenter.HomePresenterImpl
 import kotlinx.android.synthetic.main.activity_detalle.*
-import kotlinx.android.synthetic.main.post_list_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DetalleActivity : AppCompatActivity(), DetalleActivityView {
 
-    private lateinit var postsItem : PostsItem
-    private lateinit var postFavorite : PostEntity
-    private var envia = ""
+    private lateinit var postEntity : PostEntity
 
     private var usersItem:UsersItem?=null
     private var detallePresenter : DetallePresenter?=null
@@ -35,31 +29,28 @@ class DetalleActivity : AppCompatActivity(), DetalleActivityView {
 
         detallePresenter = DetallePresenterImpl(this)
 
-
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        envia = intent?.getStringExtra("envia").toString()
-
-        if(envia=="favorites"){
-            postFavorite = intent?.getSerializableExtra("post") as PostEntity
-            updateFavoriteUI(postFavorite)
-        }else{
-            postsItem = intent?.getSerializableExtra("post") as PostsItem
-            detallePresenter!!.loadUserById(postsItem.userId)
-            updateUI(postsItem)
-        }
+        postEntity = intent?.getSerializableExtra("post") as PostEntity
+        updateUI(postEntity)
 
         im_fav.setOnClickListener {
-            if(envia=="favorites"){
-                //delete fav
-            }else{
-                //insert
-                detallePresenter!!.insertFav(
-                    postsItem.id,
-                    postsItem.body,
-                    postsItem.title,
-                    postsItem.userId,
-                    usersItem!!.username,
-                    0F)
+            if(!postEntity.fav){
+                im_fav.setImageResource(R.drawable.baseline_favorite_black_24dp)
+                detallePresenter!!.update(
+                    postEntity.id,
+                    postEntity.body,
+                    postEntity.title,
+                    postEntity.userId,
+                    postEntity.user_Name,
+                    postEntity.username,
+                    postEntity.email,
+                    postEntity.addressCity,
+                    postEntity.phone,
+                    postEntity.companyName,
+                    postEntity.rating,
+                    postEntity.read,
+                    !postEntity.fav
+                )
             }
         }
 
@@ -67,19 +58,24 @@ class DetalleActivity : AppCompatActivity(), DetalleActivityView {
             object : RatingBar.OnRatingBarChangeListener{
                 override fun onRatingChanged(p0: RatingBar?, p1: Float, p2: Boolean) {
                     detallePresenter!!.update(
-                        postFavorite.id,
-                        postFavorite.body,
-                        postFavorite.title,
-                        postFavorite.userId,
-                        postFavorite.userName,
-                        p1
+                        postEntity.id,
+                        postEntity.body,
+                        postEntity.title,
+                        postEntity.userId,
+                        postEntity.user_Name,
+                        postEntity.username,
+                        postEntity.email,
+                        postEntity.addressCity,
+                        postEntity.phone,
+                        postEntity.companyName,
+                        p1,
+                        postEntity.read,
+                        postEntity.fav
                     )
                 }
             }
 
         )
-
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -89,58 +85,21 @@ class DetalleActivity : AppCompatActivity(), DetalleActivityView {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun updateUI(postsItem: PostsItem) {
-        im_fav.setImageResource(R.drawable.baseline_favorite_border_black_24dp)
-        ApiService.create()
-            .getUserById(postsItem.userId)
-            .enqueue(object : Callback<UsersItem> {
-                override fun onResponse(call: Call<UsersItem>, response: Response<UsersItem>) {
-                    val usersItem =response.body() as UsersItem
-                    tv_username.text=usersItem.username
-                    tv_nombre.text=usersItem.name
-                    tv_email.text=usersItem.email
-                    tv_ciudad.text=usersItem.address.city
-                    tv_telefono.text=usersItem.phone
-                    tv_companyname.text=usersItem.company.name
-                }
-                override fun onFailure(call: Call<UsersItem>, t: Throwable) {
-                    Log.d("ErrorDetalleUsuario",t?.message)
-                }
-
-            })
-        tv_postTittle.text=postsItem.title
-        tv_postBody.text=postsItem.body
-
-    }
-
-    private fun updateFavoriteUI(postFavorite: PostEntity) {
-        im_fav.setImageResource(R.drawable.baseline_favorite_black_24dp)
-        ratingBar.visibility= View.VISIBLE
-        ratingBar.rating=postFavorite.rating
-
-        ApiService.create()
-            .getUserById(postFavorite.userId)
-            .enqueue(object : Callback<UsersItem> {
-                override fun onResponse(call: Call<UsersItem>, response: Response<UsersItem>) {
-                    val usersItem =response.body() as UsersItem
-                    tv_username.text=usersItem.username
-                    tv_nombre.text=usersItem.name
-                    tv_email.text=usersItem.email
-                    tv_ciudad.text=usersItem.address.city
-                    tv_telefono.text=usersItem.phone
-                    tv_companyname.text=usersItem.company.name
-                }
-                override fun onFailure(call: Call<UsersItem>, t: Throwable) {
-                    Log.d("ErrorDetalleUsuario",t?.message)
-                }
-
-            })
-        tv_postTittle.text=postFavorite.title
-        tv_postBody.text=postFavorite.body
-
-    }
-
-    override fun sendUser(usersItem: UsersItem) {
-        this.usersItem=usersItem
+    private fun updateUI(postEntity: PostEntity) {
+        if(postEntity.fav){
+            im_fav.setImageResource(R.drawable.baseline_favorite_black_24dp)
+            ratingBar.visibility= View.VISIBLE
+            ratingBar.rating=postEntity.rating
+        }else{
+            im_fav.setImageResource(R.drawable.baseline_favorite_border_black_24dp)
+        }
+        tv_username.text=postEntity.username
+        tv_nombre.text=postEntity.user_Name
+        tv_email.text=postEntity.email
+        tv_ciudad.text=postEntity.addressCity
+        tv_telefono.text=postEntity.phone
+        tv_companyname.text=postEntity.companyName
+        tv_postTittle.text=postEntity.title
+        tv_postBody.text=postEntity.body
     }
 }

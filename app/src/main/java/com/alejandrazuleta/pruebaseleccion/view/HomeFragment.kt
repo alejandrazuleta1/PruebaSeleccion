@@ -5,24 +5,24 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
+import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
+import com.alejandrazuleta.pruebaseleccion.Model.Local.Repository
 import com.alejandrazuleta.pruebaseleccion.R
 import com.alejandrazuleta.pruebaseleccion.presenter.HomePresenter
 import com.alejandrazuleta.pruebaseleccion.presenter.HomePresenterImpl
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_home.view.recyclerView
 
 
-class HomeFragment: Fragment(),HomeFragmentView {
+class HomeFragment: Fragment(),HomeFragmentView,OnClickListener {
 
     private var homePresenter : HomePresenter?=null
-    private var listPosts : List<PostsItem> ?=null
 
     private lateinit var postAdapter: PostAdapter
     private lateinit var root : View
@@ -36,11 +36,9 @@ class HomeFragment: Fragment(),HomeFragmentView {
         savedInstanceState: Bundle?
     ): View? {
         root = inflater.inflate(R.layout.fragment_home, container, false)
-        setHasOptionsMenu(true)
 
         homePresenter = HomePresenterImpl(this)
-
-        getPost()
+        loadListPost()
 
         deleteIcon= ContextCompat.getDrawable(
             activity!!.applicationContext,
@@ -135,44 +133,30 @@ class HomeFragment: Fragment(),HomeFragmentView {
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(root.recyclerView)
 
-        return root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_listado, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.mo_eliminar -> {
-                postAdapter.removeAllItem()
-            }
-            R.id.mo_actualizar -> {
-                getPost()
-                postAdapter.notifyDataSetChanged()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun getPost() {
-        homePresenter?.loadListPost()
-    }
-
-    override fun showErrorLoadPost(message: String?) {
-        Log.d("LoadPost", message!!)
-    }
-
-    override fun sendListPosts(posts: List<PostsItem>) {
-        this.listPosts = posts
         root.recyclerView.setHasFixedSize(true)
         root.recyclerView.layoutManager = LinearLayoutManager(
             context,
             RecyclerView.VERTICAL,
             false
         )
-        postAdapter = PostAdapter(listPosts as ArrayList<PostsItem>)
-        root.recyclerView.adapter=postAdapter
+
+        return root
     }
+
+    private fun loadListPost() {
+        val repository = Repository()
+        repository.getPost().observe(this, Observer {
+            postAdapter=PostAdapter(it!! as java.util.ArrayList<PostEntity>,this)
+            root.recyclerView.adapter = postAdapter
+        })
+    }
+
+    fun update(postEntity: PostEntity) {
+        homePresenter!!.update(postEntity)
+    }
+
+    override fun onItemClick(postEntity: PostEntity) {
+        update(postEntity)
+    }
+
 }

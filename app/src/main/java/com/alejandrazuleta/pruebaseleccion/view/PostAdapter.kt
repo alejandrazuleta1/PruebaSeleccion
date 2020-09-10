@@ -8,56 +8,37 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alejandrazuleta.pruebaseleccion.Model.ApiService
+import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
 import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
 import com.alejandrazuleta.pruebaseleccion.Model.UsersItem
 import com.alejandrazuleta.pruebaseleccion.R
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.post_list_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAdapter.PostsViewHolder>() {
+class PostAdapter(postsList: ArrayList<PostEntity>,onClickListener: OnClickListener): RecyclerView.Adapter<PostAdapter.PostsViewHolder>() {
 
-    private var postsList = ArrayList<PostsItem>()
+    private var postsList = ArrayList<PostEntity>()
+    private var onClickListener : OnClickListener? = null
 
     init {
         this.postsList = postsList
+        this.onClickListener=onClickListener
     }
 
-    class PostsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    class PostsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+        {
 
-        private var post: PostsItem? = null
+        private var post: PostEntity? = null
 
-        init {
-            itemView.setOnClickListener(this)
-        }
-
-        fun setPost(post: PostsItem) {
+        fun setPost(post: PostEntity) {
             this.post = post
-            ApiService.create()
-                .getUserById(post.userId)
-                .enqueue(object : Callback<UsersItem> {
-                    override fun onResponse(call: Call<UsersItem>, response: Response<UsersItem>) {
-                        itemView.tv_user_name.text= response.body()!!.username
-                    }
-
-                    override fun onFailure(call: Call<UsersItem>, t: Throwable) {
-                        Log.d("ErrorGetUserById",t.message!!)
-                    }
-                })
+            itemView.tv_user_name.text=post.username
             itemView.tv_tittle.text = post.title
             itemView.tv_body.text = post.body
-        }
-
-
-        override fun onClick(v: View) {
-            val intent = Intent(itemView.context, DetalleActivity::class.java)
-            intent.putExtra("post", post)
-            intent.putExtra("envia", "list")
-            itemView.cardView.setCardBackgroundColor(Color.parseColor("#F5F5F5"))
-            itemView.context.startActivity(intent)
         }
     }
 
@@ -69,8 +50,30 @@ class PostAdapter(postsList: ArrayList<PostsItem>): RecyclerView.Adapter<PostAda
 
     override fun onBindViewHolder(holder: PostsViewHolder, position: Int) {
         val post = postsList[position]
-        if(position<20) holder.itemView.cardView.setCardBackgroundColor(Color.parseColor("#BBDEFB"))
-        else holder.itemView.cardView.setCardBackgroundColor(Color.parseColor("#F5F5F5"))
+        holder.itemView.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                onClickListener!!.onItemClick(PostEntity(
+                    post.id,
+                    post.body,
+                    post.title,
+                    post.userId,
+                    post.user_Name,
+                    post.username,
+                    post.email,
+                    post.addressCity,
+                    post.phone,
+                    post.companyName,
+                    post.rating,
+                    true,
+                    post.fav
+                ))
+                val intent = Intent(p0!!.context, DetalleActivity::class.java)
+                intent.putExtra("post", post)
+                p0.context.startActivity(intent)
+            }
+        })
+        if(post.read)holder.itemView.cardView.setCardBackgroundColor(Color.parseColor("#F5F5F5"))
+        else holder.itemView.cardView.setCardBackgroundColor(Color.parseColor("#BBDEFB"))
         holder.setPost(post)
     }
 

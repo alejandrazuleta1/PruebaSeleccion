@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_favorites.view.*
 
 class FavoritesFragment: Fragment() {
 
-    private var listPosts = ArrayList<PostsItem>()
     private lateinit var root : View
 
     override fun onCreateView(
@@ -24,19 +23,19 @@ class FavoritesFragment: Fragment() {
     ): View? {
         root = inflater.inflate(R.layout.fragment_favorites,container,false)
 
+        loadListFavoritesPost()
         root.recyclerView.setHasFixedSize(true)
         root.recyclerView.layoutManager = LinearLayoutManager(
             context,
             RecyclerView.VERTICAL,
             false
         )
-        loadListFavoritesPost()
         return root
     }
 
     private fun loadListFavoritesPost() {
         val repository = Repository()
-        repository.getFavoritesPosts().observe(this, Observer {
+        repository.getPostFavorites().observe(this, Observer {
             root.recyclerView.adapter = FavoritesPostsAdapter(it!! as java.util.ArrayList<PostEntity>)
         })
     }

@@ -8,15 +8,8 @@ class Repository {
 
     var postDAO = PruebaSeleccion.database.PostDAO()
 
-    fun insertPostFavorite(
-        id: Int,
-        body: String,
-        title: String,
-        userId :Int,
-        userName: String,
-        rating : Float
+    fun insertPost(post: PostEntity
     ){
-        val post = PostEntity(id,body, title, userId,userName,rating)
         insertTask(post)
     }
 
@@ -30,8 +23,12 @@ class Repository {
         }.execute()
     }
 
-    fun getFavoritesPosts():LiveData<List<PostEntity>>{
+    fun getPost():LiveData<List<PostEntity>>{
         return postDAO.getPosts()
+    }
+
+    fun getPostFavorites():LiveData<List<PostEntity>>{
+        return postDAO.getPostsFavorites()
     }
 
     fun update(post: PostEntity){
@@ -48,13 +45,18 @@ class Repository {
         }.execute()
     }
 
-/*
-    fun deletePostFavorite(id: Int) {
-        //TODO("Not yet implemented")
+    fun deteleAll(){
+        deleteTask()
     }
 
-
-
-     */
+    @SuppressLint("StaticFieldLeak")
+    private fun deleteTask() {
+        object : AsyncTask<Void,Void,Void>(){
+            override fun doInBackground(vararg p0: Void): Void? {
+                postDAO.deleteAll()
+                return null
+            }
+        }.execute()
+    }
 
 }
