@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.alejandrazuleta.pruebaseleccion.Model.Local.PostEntity
 import com.alejandrazuleta.pruebaseleccion.Model.PostsItem
 import com.alejandrazuleta.pruebaseleccion.Model.UsersItem
 import com.alejandrazuleta.pruebaseleccion.R
 import com.alejandrazuleta.pruebaseleccion.presenter.MainPresenter
 import com.alejandrazuleta.pruebaseleccion.presenter.MainPresenterImpl
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainView{
 
@@ -72,6 +74,14 @@ class MainActivity : AppCompatActivity(), MainView{
 
     override fun showErrorLoadPost(message: String?) {
         Log.d("LoadPost", message!!)
+    }
+
+    override fun showProgresBar() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgresBar() {
+        progressBar.visibility = View.GONE
     }
 
 

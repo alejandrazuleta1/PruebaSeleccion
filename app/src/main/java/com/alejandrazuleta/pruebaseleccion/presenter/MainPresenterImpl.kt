@@ -12,8 +12,14 @@ class MainPresenterImpl (var mainView: MainView):MainPresenter{
     var mainInteractor = MainInteractorImpl(this)
 
     override fun loadListPost() {
+        mainView.showProgresBar()
         mainInteractor.loadListPost()
     }
+
+    override fun loaded() {
+        mainView.hideProgresBar()
+    }
+
 
     override fun showErrorLoadPost(message: String?) {
         mainView.showErrorLoadPost(message)

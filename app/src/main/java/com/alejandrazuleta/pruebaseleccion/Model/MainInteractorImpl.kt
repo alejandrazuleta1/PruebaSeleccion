@@ -54,6 +54,7 @@ class MainInteractorImpl(var mainPresenter: MainPresenter):MainInteractor {
                                     }
                                 })
                         }
+                        mainPresenter.loaded()
                     }
                 }
             })

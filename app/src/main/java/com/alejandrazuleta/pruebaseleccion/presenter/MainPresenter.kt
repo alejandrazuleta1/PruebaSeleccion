@@ -6,6 +6,7 @@ import com.alejandrazuleta.pruebaseleccion.Model.UsersItem
 
 interface MainPresenter {
     fun loadListPost()
+    fun loaded()
     fun showErrorLoadPost(message: String?)
     fun deleteAll()
 }
